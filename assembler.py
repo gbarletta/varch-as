@@ -1,4 +1,5 @@
 import lexer
+import generator
 
 class Assembler:
   current_line = 0
@@ -14,5 +15,15 @@ class Assembler:
   def assemble(self):
     lex = lexer.Lexer(self.file_path, self.text)
     lex.lex()
+
     for token in lex.tokens:
       print(token)
+
+    gen = generator.Generator(self.file_path, lex.tokens)
+    gen.generate()
+
+    print(gen.symbols)
+    print(gen.executable)
+
+    with open(self.file_path.replace(".s", ".bin"), "wb") as f:
+      f.write(gen.executable)

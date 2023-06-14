@@ -103,6 +103,11 @@ class Token:
   def __str__(self):
     return f"{self.location}: {token_names[self.type]} \"{self.text}\""
 
+class Symbol:
+  def __init__(self, name, location):
+    self.name = name
+    self.location = location
+
 class AssemblerError(Exception):
   def __init__(self, gen, message, offset=0):
     self.location = gen.get_current_location(offset=offset)

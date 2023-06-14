@@ -1,5 +1,9 @@
 from defs import Token, TokenType, Location
 
+hard_macros = {
+  "FLAGS_LESSEQ": "0",
+}
+
 class Lexer:
   cursor = 0; row = 0; col = 0
   stomach = []; tokens = []
@@ -7,6 +11,8 @@ class Lexer:
   def __init__(self, file_path, text):
     self.file_path = file_path
     self.text = text
+    for macro in hard_macros:
+      self.text = self.text.replace(macro, hard_macros[macro])
 
   def eof(self):
     return self.cursor >= len(self.text)
