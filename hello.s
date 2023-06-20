@@ -9,7 +9,7 @@
 	mov	r1, 40
 	mov	[r0], r1
 	mov	r0, sf
-	add	r0, 4
+	add	r0, 2
 	mov	r1, [r0]
 	mov	r0, 1
 	cmp	r1, r0
@@ -18,14 +18,14 @@
 	jmp	L1
 .L0:
 	mov	r0, sf
-	add	r0, 4
+	add	r0, 2
 	mov	r1, [r0]
 	mov	rv, r1
 	jmp	L2
 .L1:
 	mov	r0, fibonacci
 	mov	r1, sf
-	add	r1, 4
+	add	r1, 2
 	mov	r2, [r1]
 	mov	r1, 1
 	sub	r2, r1
@@ -35,7 +35,7 @@
 	mov	r0, rv
 	mov	r1, fibonacci
 	mov	r2, sf
-	add	r2, 4
+	add	r2, 2
 	mov	r3, [r2]
 	mov	r2, 2
 	sub	r3, r2
@@ -67,4 +67,3 @@
 	mov	sp, sf
 	pop	sf
 	ret
-

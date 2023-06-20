@@ -25,5 +25,7 @@ class Assembler:
     print(gen.symbols)
     print(gen.executable)
 
+    print(gen.unresolved_symbols)
+
     with open(self.file_path.replace(".s", ".bin"), "wb") as f:
       f.write(gen.executable)

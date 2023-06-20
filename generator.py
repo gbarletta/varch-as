@@ -21,6 +21,7 @@ opcodes = {
   "call": 16,
   "pop": 17,
   "ret": 18,
+  "hlt": 19,
 }
 
 registers = {
@@ -178,7 +179,7 @@ class Generator:
               self.current_memory_location += 1
             elif right_token.type == TokenType.NAME:
               right = self.get_symbol(right_token.text)
-              right_type = "mem"
+              right_type = "num"
               self.current_memory_location += 2
             elif right_token.type == TokenType.NUMLIT:
               right = short(int(right_token.text))
@@ -305,7 +306,18 @@ class Generator:
           self.append(opcode)
           self.current_memory_location += 1
           continue
+        case TokenType.HLT:
+          opcode = opcodes[self.peek(0).text]
+          self.incr()
+          self.append(opcode)
+          self.current_memory_location += 1
+          continue
       print(self.peek())
+    for sym in self.unresolved_symbols:
+      value = self.symbols[sym["name"]]
+      self.executable[sym["offset"]] = (value >> 8) & 0xFF
+      self.executable[sym["offset"] + 1] = value & 0xFF
+      print(f"Replaced symbol {sym['name']} at {hex(sym['offset'])} with value {hex(value)}")
         
 
   

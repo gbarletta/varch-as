@@ -9,7 +9,7 @@ def gen_token_list():
     "ADD", "SUB", "CMP",
     "FLG", "JNZ", "JMP",
     "CALL", "SF", "SP",
-    "RV",
+    "RV", "HLT",
   ]
   for i in range(16):
     tokens.append(f"R{i}")
@@ -45,6 +45,7 @@ reserved_names = [
   ("jnz", TokenType.JNZ),
   ("jmp", TokenType.JMP),
   ("call", TokenType.CALL),
+  ("hlt", TokenType.HLT),
   ("sf", TokenType.SF),
   ("sp", TokenType.SP),
   ("rv", TokenType.RV),

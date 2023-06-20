@@ -2,6 +2,7 @@ from defs import Token, TokenType, Location
 
 hard_macros = {
   "FLAGS_LESSEQ": "0",
+  "FLAGS_EQUAL": "4",
 }
 
 class Lexer:
