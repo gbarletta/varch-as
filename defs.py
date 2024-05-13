@@ -1,5 +1,5 @@
 from enum import IntEnum
-  
+
 def gen_token_list():
   tokens = [
     "NAME", "DOT", "COLON",
@@ -9,7 +9,7 @@ def gen_token_list():
     "ADD", "SUB", "CMP",
     "FLG", "JNZ", "JMP",
     "CALL", "SF", "SP",
-    "RV", "HLT",
+    "RV", "HLT", "PUSHA", "POPA",
   ]
   for i in range(16):
     tokens.append(f"R{i}")
@@ -24,16 +24,18 @@ def gen_token_names():
     "Add", "Sub", "Compare",
     "Flag", "Jump Not Zero", "Jump",
     "Call", "Stack Frame", "Stack Pointer",
-    "Return Value",
+    "Return Value", "Pushall", "Popall"
   ]
   for i in range(16):
     names.append(f"Register {i}")
   return names
-  
+
 TokenType = IntEnum("TokenType", gen_token_list(), start=0)
 token_names = gen_token_names()
 
 reserved_names = [
+  ("pusha", TokenType.PUSHA),
+  ("popa", TokenType.POPA),
   ("mov", TokenType.MOV),
   ("push", TokenType.PUSH),
   ("pop", TokenType.POP),
@@ -100,7 +102,7 @@ class Token:
       self.type = token_type
     self.text = text
     self.location = location
-  
+
   def __str__(self):
     return f"{self.location}: {token_names[self.type]} \"{self.text}\""
 

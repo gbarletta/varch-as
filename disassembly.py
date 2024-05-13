@@ -18,6 +18,8 @@ opcodes = [
   "call",
   "pop",
   "ret",
+  "pusha",
+  "popa",
 ]
 
 registers = [

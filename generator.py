@@ -22,6 +22,8 @@ opcodes = {
   "pop": 17,
   "ret": 18,
   "hlt": 19,
+  "pusha": 20,
+  "popa": 21,
 }
 
 registers = {
@@ -52,14 +54,14 @@ def short(value):
   return struct.pack('>H', value)
 
 class Generator:
-  cursor = 0; current_memory_location = 0 
+  cursor = 0; current_memory_location = 0
   symbols = {}; unresolved_symbols = []
 
   def __init__(self, file_path, tokens):
     self.file_path = file_path
     self.tokens = tokens
     self.executable = bytearray()
-  
+
   def incr(self, offset=1):
     self.cursor += offset
 
@@ -71,7 +73,7 @@ class Generator:
     if position >= len(self.tokens):
       raise AssemblerError(self, "eof")
     return self.tokens[position]
-  
+
   def expect_token(self, token_type, incr=True):
     token = self.peek()
     if token.type != token_type:
@@ -79,7 +81,7 @@ class Generator:
     if incr:
       self.incr()
     return token
-  
+
   def expect_register(self, incr=True):
     token = self.peek()
     if not token.is_register:
@@ -87,7 +89,7 @@ class Generator:
     if incr:
       self.incr()
     return token
-  
+
   def expect_reg_or_num(self, incr=True):
     token = self.peek()
     if not token.is_register and token.type != TokenType.NUMLIT:
@@ -95,7 +97,7 @@ class Generator:
     if incr:
       self.incr()
     return token
-  
+
   def expect_number(self, incr=True):
     token = self.peek()
     if token.type != TokenType.NUMLIT:
@@ -103,13 +105,13 @@ class Generator:
     if incr:
       self.incr()
     return token
-  
+
   def get_current_location(self, offset=0):
     position = self.cursor + offset
     if position >= len(self.tokens):
       raise AssemblerError(self, "eof")
     return self.tokens[position].location
-  
+
   def append(self, value):
     if isinstance(value, int):
       self.executable.append(value)
@@ -312,12 +314,21 @@ class Generator:
           self.append(opcode)
           self.current_memory_location += 1
           continue
+        case TokenType.PUSHA:
+          opcode = opcodes[self.peek(0).text]
+          self.incr()
+          self.append(opcode)
+          self.current_memory_location += 1
+          continue
+        case TokenType.POPA:
+          opcode = opcodes[self.peek(0).text]
+          self.incr()
+          self.append(opcode)
+          self.current_memory_location += 1
+          continue
       print(self.peek())
     for sym in self.unresolved_symbols:
       value = self.symbols[sym["name"]]
       self.executable[sym["offset"]] = (value >> 8) & 0xFF
       self.executable[sym["offset"] + 1] = value & 0xFF
       print(f"Replaced symbol {sym['name']} at {hex(sym['offset'])} with value {hex(value)}")
-        
-
-  
